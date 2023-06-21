@@ -14,12 +14,17 @@ export default {
     <form class="container" @submit.prevent>
         <div class="filters-section__search">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" placeholder="Search for a country..." v-model="term">
+            <input
+              type="text"
+              placeholder="Search for a country..."
+              v-model="term"
+              @input="$emit('setTerm', term.toLowerCase())"
+            />
         </div>
-        <select class="filters-section__filter" v-model="filter" @change="$emit('getCountries', filter, term)">
+        <select class="filters-section__filter" v-model="filter" @change="$emit('setFilter', filter)">
             <option value="" selected>All regions</option>
             <option value="africa">Africa</option>
-            <option value="america">America</option>
+            <option value="americas">America</option>
             <option value="asia">Asia</option>
             <option value="europe">Europe</option>
             <option value="oceania">Oceania</option>
@@ -78,5 +83,13 @@ main.light .filters-section__filter, main.light .filters-section__search {
 
 main.light .filters-section__search input {
     color: hsl(200, 15%, 8%);
+}
+
+@media only screen and (max-width: 815px) {
+    .filters-section .container {
+        flex-direction: column;
+        align-items: start;
+        gap: 20px;
+    }
 }
 </style>

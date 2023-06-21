@@ -44,6 +44,8 @@ export default {
 
 .card__img {
   width: 100%;
+  height: 170px;
+  object-fit: cover;
 }
 
 .card__info {

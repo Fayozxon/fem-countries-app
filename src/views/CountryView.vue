@@ -1,16 +1,20 @@
 <script>
 import { useRoute } from 'vue-router';
+import { RouterLink } from 'vue-router';
 import data from '../data/data.json';
 
 export default {
-  data() {
-    return {
-      country: data.find(c => c.name.toLowerCase() === useRoute().params.name)
+  computed: {
+    country() {
+      return data.find(c => c.name.toLowerCase() === useRoute().params.name);
     }
   },
   methods: {
     goBack() {
       window.history.back();
+    },
+    getCountry(countryCode) {
+      return data.find(c => c.alpha3Code === countryCode).name;
     }
   }
 }
@@ -44,7 +48,7 @@ export default {
           <li class="country-section__info--text">
             <span>Capital:</span> {{ country.capital }}
           </li>
-          <li class="country-section__info--text">
+          <li class="country-section__info--text domain">
             <span>Top level domain:</span> <b v-for="domain in country.topLevelDomain">{{ domain+' ' }}</b> 
           </li>
           <li class="country-section__info--text">
@@ -56,7 +60,12 @@ export default {
         </ul>
         <p class="country-section__info--text" v-if="country.borders">
           <span>Border Countries:</span>
-          <button class="btn border" v-for="border in country.borders">{{ border }}</button>
+          <RouterLink
+            :to="`/country/${getCountry(countryCode).toLowerCase()}`"
+            class="btn border"
+            v-for="countryCode in country.borders">
+            {{ getCountry(countryCode) }}
+          </RouterLink>
         </p>
       </div>
     </section>
@@ -85,6 +94,9 @@ main.light .btn {
 
 .border {
   margin: 10px;
+  display: inline-block;
+  text-decoration: none;
+  padding: 5px 10px;
 }
 
 .country-section {
@@ -102,6 +114,11 @@ main.light .btn {
   box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 }
 
+
+.domain {
+  padding-top: 20px;
+}
+
 .country-section__info--title {
   font-size: 32px;
   font-weight: 800;
@@ -117,5 +134,20 @@ main.light .btn {
 
 .country-section__info--text span {
   font-weight: 600;
+}
+
+
+@media only screen and (max-width: 815px) {
+  .country-section {
+    flex-direction: column;
+  }
+
+  .country-section > div {
+    width: 100%;
+  }
+
+  .country-section__info--title {
+    padding-top: 30px;
+  }
 }
 </style>
